@@ -414,7 +414,7 @@ def main():
         "Search Exporter": lambda: search_exporter_page(df),
         "Search Importer": lambda: search_importer_page(df, "foreign_company"),
         "Search Product Importer": lambda: search_product_page_importer(df),
-        "Search Product Exporter": lambda: search_product_page_exporter(df)
+        "Search Product Exporter": lambda: search_product_page_exporter(df)    
     }
 
 
