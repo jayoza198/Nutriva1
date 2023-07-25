@@ -367,7 +367,6 @@ def search_product_page_exporter(df):
             # Sort the exporters by FOB INR in descending order
             top_exporters = top_exporters.sort_values('FOB INR', ascending=False)
 
-            top_exporters = top_exporters.reset_index(drop=True)
             
             # Display the top exporters for the selected product
             st.markdown(f"### Top Exporters for Product: {product_name}")
