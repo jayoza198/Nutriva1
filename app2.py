@@ -328,7 +328,7 @@ def search_product_page_importer(df):
             filtered_df = df[df['Product'].str.contains(product_name, case=False)]
 
             # Group the data by Foreign Company (Importer) and sum FOB INR
-            top_importers = filtered_df.groupby('Foreign Company')['FOB INR'].sum().nlargest(10).reset_index()
+            top_importers = filtered_df.groupby('Foreign Company')['FOB INR'].sum().reset_index()
 
             # Sort the importers by FOB INR in descending order
             top_importers = top_importers.sort_values('FOB INR', ascending=False)
@@ -362,7 +362,7 @@ def search_product_page_exporter(df):
             filtered_df = df[df['Product'].str.contains(product_name, case=False)]
 
             # Group the data by Indian Company (Exporter) and sum FOB INR
-            top_exporters = filtered_df.groupby('Indian Company')['FOB INR'].sum().nlargest(10).reset_index()
+            top_exporters = filtered_df.groupby('Indian Company')['FOB INR'].sum().reset_index()
 
             # Sort the exporters by FOB INR in descending order
             top_exporters = top_exporters.sort_values('FOB INR', ascending=False)
