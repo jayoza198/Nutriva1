@@ -317,8 +317,7 @@ def search_importer_page(df, foreign_company):
 #         else:
 #             st.markdown("Importer not found.")
 
-# Function to search for a product
-def search_product_page_importer(df):
+# Function to search for a productdef search_product_page_importer(df):
     st.title("Search Product by Importer")
     product_name = st.text_input("Enter the product name:")
     
@@ -328,7 +327,7 @@ def search_product_page_importer(df):
             # Filter the DataFrame for the selected product
             filtered_df = df[df['Product'].str.contains(product_name, case=False)]
 
-            # Group the data by Foreign Company
+            # Group the data by Indian Company
             grouped_data = filtered_df.groupby(['ForeignCompany'])['FOB INR'].sum().reset_index()
 
             # Sort the data by FOB INR column in descending order
@@ -357,6 +356,7 @@ def search_product_page_importer(df):
     b64_product = base64.b64encode(excel_product.read()).decode()
     href_product = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64_product}" download="product_details.xlsx">Download as Excel File</a>'
     st.markdown(href_product, unsafe_allow_html=True)
+
 
 
 # Function to search for a product
