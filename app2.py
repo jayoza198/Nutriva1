@@ -317,6 +317,73 @@ def search_importer_page(df, foreign_company):
 #         else:
 #             st.markdown("Importer not found.")
 
+def search_product_page_importer(df):
+    st.title("Search Product by Importer")
+    product_name = st.text_input("Enter the product name:")
+
+    if product_name:
+        # Check if the input product name is in the DataFrame
+        if df['Product'].str.contains(product_name, case=False).any():
+            # Filter the DataFrame for the selected product
+            filtered_df = df[df['Product'].str.contains(product_name, case=False)]
+
+            # Group the data by Foreign Company (Importer) and sum FOB INR
+            top_importers = filtered_df.groupby('Foreign Company')['FOB INR'].sum().nlargest(10).reset_index()
+
+            # Sort the importers by FOB INR in descending order
+            top_importers = top_importers.sort_values('FOB INR', ascending=False)
+
+            # Display the top importers for the selected product
+            st.markdown(f"### Top Importers for Product: {product_name}")
+            st.dataframe(top_importers)
+
+            # Download button for importers
+            excel_importers = BytesIO()
+            with pd.ExcelWriter(excel_importers, engine="xlsxwriter") as writer:
+                top_importers.to_excel(writer, index=False)
+            excel_importers.seek(0)
+            b64_importers = base64.b64encode(excel_importers.read()).decode()
+            href_importers = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64_importers}" download="top_importers_for_{product_name.replace(" ", "_")}.xlsx">Download Top Importers as Excel File</a>'
+            st.markdown(href_importers, unsafe_allow_html=True)
+        else:
+            st.markdown("Product not found.")
+    else:
+        filtered_df = pd.DataFrame()  # Create an empty DataFrame when product_name is not entered
+
+
+def search_product_page_exporter(df):
+    st.title("Search Product by Exporter")
+    product_name = st.text_input("Enter the product name:")
+
+    if product_name:
+        # Check if the input product name is in the DataFrame
+        if df['Product'].str.contains(product_name, case=False).any():
+            # Filter the DataFrame for the selected product
+            filtered_df = df[df['Product'].str.contains(product_name, case=False)]
+
+            # Group the data by Indian Company (Exporter) and sum FOB INR
+            top_exporters = filtered_df.groupby('Indian Company')['FOB INR'].sum().nlargest(10).reset_index()
+
+            # Sort the exporters by FOB INR in descending order
+            top_exporters = top_exporters.sort_values('FOB INR', ascending=False)
+
+            # Display the top exporters for the selected product
+            st.markdown(f"### Top Exporters for Product: {product_name}")
+            st.dataframe(top_exporters)
+
+            # Download button for exporters
+            excel_exporters = BytesIO()
+            with pd.ExcelWriter(excel_exporters, engine="xlsxwriter") as writer:
+                top_exporters.to_excel(writer, index=False)
+            excel_exporters.seek(0)
+            b64_exporters = base64.b64encode(excel_exporters.read()).decode()
+            href_exporters = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64_exporters}" download="top_exporters_for_{product_name.replace(" ", "_")}.xlsx">Download Top Exporters as Excel File</a>'
+            st.markdown(href_exporters, unsafe_allow_html=True)
+        else:
+            st.markdown("Product not found.")
+    else:
+        filtered_df = pd.DataFrame()  # Create an empty DataFrame when product_name is not entered
+
 
 
 def main():
@@ -331,7 +398,8 @@ def main():
         "Top Foreign Companies": display_top_foreign_companies_page,
         "Search Exporter": lambda: search_exporter_page(df),
         "Search Importer": lambda: search_importer_page(df, "foreign_company"),
-        
+        "Search Product Importer": lambda: search_product_page_importer(df),
+        "Search Product Exporter": lambda: search_product_page_exporter(df)
     }
 
 
